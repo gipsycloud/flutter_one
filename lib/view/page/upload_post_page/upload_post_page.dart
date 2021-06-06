@@ -1,23 +1,18 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:image_picker/image_picker.dart';
 
-class RegisterPage extends StatefulWidget {
+class UploadPostPage extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _UploadPostPageState createState() => _UploadPostPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  File _image;
-  final picker = ImagePicker();
-
+class _UploadPostPageState extends State<UploadPostPage> {
+  var selectedCategoryId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: NeumorphicAppBar(
-        title: Text("Register"),
+        title: Text("New Post"),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
@@ -27,31 +22,26 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(
               height: 20,
             ),
-            NeumorphicButton(
-              onPressed: () {
-                pickImage();
-              },
+            Neumorphic(
               style: NeumorphicStyle(
                 shape: NeumorphicShape.flat,
-                boxShape: NeumorphicBoxShape.circle(),
+                boxShape:
+                    NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
                 depth: -4,
                 lightSource: LightSource.topLeft,
               ),
               child: Container(
-                width: 100,
-                height: 100,
-                child: _image != null
-                    ? Image.file(_image)
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.person),
-                          Text(
-                            "Upload\nPhoto",
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
+                height: 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.photo),
+                    Text(
+                      "Upload\nPhoto",
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -67,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               child: TextField(
                 decoration: InputDecoration(
-                    hintText: "Enter Name",
+                    hintText: "Enter Title",
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 20)),
               ),
@@ -85,9 +75,11 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               child: TextField(
                 decoration: InputDecoration(
-                    hintText: "Enter Email",
+                    hintText: "Enter Description",
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 20)),
+                    contentPadding: EdgeInsets.only(left: 20, top: 10)),
+                maxLines: 4,
+                minLines: 4,
               ),
             ),
             SizedBox(
@@ -101,9 +93,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 depth: -4,
                 lightSource: LightSource.topLeft,
               ),
-              child: TextField(
+              child: DropdownButtonFormField<int>(
+                onChanged: (i) {}, // i = id
+                items: [DropdownMenuItem(child: Text("Laravel"), value: 1)],
                 decoration: InputDecoration(
-                    hintText: "Enter Password",
+                    hintText: "Select Category",
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(left: 20)),
               ),
@@ -112,9 +106,10 @@ class _RegisterPageState extends State<RegisterPage> {
               height: 20,
             ),
             NeumorphicButton(
+              onPressed: () {},
               child: Center(
                 child: Text(
-                  "Register",
+                  "Upload",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -123,24 +118,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 boxShape:
                     NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
                 depth: 8,
-                lightSource: LightSource.topLeft,
+                // lightSource: LightSource.topLeft,
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
   }
 }

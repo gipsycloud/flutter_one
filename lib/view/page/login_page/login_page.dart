@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:help/view/page/home_page/home_page.dart';
 import 'package:help/view/page/register_page/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return RegisterPage();
+                  return HomePage();
                 }));
               },
               child: Center(
