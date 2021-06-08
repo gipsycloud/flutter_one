@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UploadPostPage extends StatefulWidget {
   @override
@@ -6,6 +9,9 @@ class UploadPostPage extends StatefulWidget {
 }
 
 class _UploadPostPageState extends State<UploadPostPage> {
+  File _image;
+  final picker = ImagePicker();
+
   var selectedCategoryId;
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,10 @@ class _UploadPostPageState extends State<UploadPostPage> {
             SizedBox(
               height: 20,
             ),
-            Neumorphic(
+            NeumorphicButton(
+              onPressed: () {
+                pickImage();
+              },
               style: NeumorphicStyle(
                 shape: NeumorphicShape.flat,
                 boxShape:
@@ -32,16 +41,21 @@ class _UploadPostPageState extends State<UploadPostPage> {
               ),
               child: Container(
                 height: 200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.photo),
-                    Text(
-                      "Upload\nPhoto",
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                ),
+                child: _image != null
+                    ? Image.file(
+                        _image,
+                        fit: BoxFit.cover,
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.photo),
+                          Text(
+                            "Upload\nPhoto",
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
               ),
             ),
             SizedBox(
@@ -125,5 +139,18 @@ class _UploadPostPageState extends State<UploadPostPage> {
         ),
       ),
     );
+  }
+
+  Future pickImage() async {
+    final pickedFile =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 50);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }

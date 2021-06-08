@@ -41,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 width: 100,
                 height: 100,
                 child: _image != null
-                    ? Image.file(_image)
+                    ? Image.file(_image, fit: BoxFit.cover)
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -133,7 +133,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 50);
 
     setState(() {
       if (pickedFile != null) {
